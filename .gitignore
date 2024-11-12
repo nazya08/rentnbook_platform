@@ -166,3 +166,7 @@ static/
 media/
 /media/
 */media/
+
+*~
+*.py~
+*.yaml~
