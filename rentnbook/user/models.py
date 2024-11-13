@@ -5,7 +5,6 @@ from django.db import models
 from django.db.models import TextChoices
 from django.utils.translation import gettext_lazy as _
 
-from accommodation.models import Accommodation
 from .managers import UserManager
 
 
@@ -26,7 +25,10 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     middle_name = models.CharField(max_length=150, blank=True, null=True)
+    profile_picture = models.ImageField(
+        upload_to='profile_pictures/', null=True, blank=True, verbose_name='Profile Picture')
     phone_number = models.CharField(max_length=20, unique=True)
+    telegram_name = models.CharField(max_length=50, blank=True, null=True)
     date_joined = models.DateTimeField(auto_now_add=True)
 
     is_active = models.BooleanField(default=True)
@@ -46,6 +48,10 @@ class Renter(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='renter_profile')
     rental_history = models.TextField(blank=True, null=True, help_text="History of previous rentals")
     preferred_properties = models.TextField(blank=True, null=True, help_text="Preferences for property types")
+
+    class Meta:
+        verbose_name = "Renter"
+        verbose_name_plural = "Renters"
 
     def __str__(self):
         return f"Renter Profile for {self.user.email}"
