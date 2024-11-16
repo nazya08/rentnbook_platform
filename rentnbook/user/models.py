@@ -3,8 +3,12 @@ import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models import TextChoices
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from accommodation.models import Accommodation
 from .managers import UserManager
 
 
@@ -18,12 +22,13 @@ class User(AbstractUser):
     id = models.AutoField(primary_key=True)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
+    username = models.CharField(max_length=150, unique=True, blank=True, null=True)
     role = models.CharField(
         max_length=50,
         choices=RolesChoices.choices,
     )
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
+    first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
     middle_name = models.CharField(max_length=150, blank=True, null=True)
     profile_picture = models.ImageField(
         upload_to='profile_pictures/', null=True, blank=True, verbose_name='Profile Picture')
@@ -42,6 +47,14 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.email} ({self.role})"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.role == 'landlord' and not hasattr(self, 'landlord_profile'):
+            LandLord.objects.get_or_create(user=self)
+        elif self.role == 'renter' and not hasattr(self, 'renter_profile'):
+            Renter.objects.get_or_create(user=self)
 
 
 class Renter(models.Model):
@@ -67,3 +80,15 @@ class LandLord(models.Model):
 
     def __str__(self):
         return f"LandLord Profile for {self.user.email}"
+
+
+@receiver(post_save, sender=Accommodation)
+def set_hosting_since(sender, instance, created, **kwargs):
+    """
+    Встановлює дату початку хостингу (hosting_since) для орендодавця при створенні першого об'єкта Accommodation.
+    """
+    if created:
+        landlord_profile = instance.owner
+        if landlord_profile and not landlord_profile.hosting_since:
+            landlord_profile.hosting_since = timezone.now()
+            landlord_profile.save()

@@ -22,7 +22,7 @@ class UserManager(BaseUserManager):
 
     def create_moderator(self, email, password=None, **extra_fields):
         extra_fields.setdefault('role', 'moderator')
-        extra_fields.setdefault('is_staff', True)  # Установлюємо is_staff=True для модераторів
+        extra_fields.setdefault('is_staff', True)
         return self.create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password=None, **extra_fields):

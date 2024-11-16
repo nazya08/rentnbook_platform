@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Головна{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="jumbotron text-center">
+        <h1 class="display-4">Ласкаво просимо!</h1>
+        <p class="lead">Це головна сторінка вашого сайту.</p>
+        <hr class="my-4">
+        <p>Ви можете здійснити вхід, зареєструватися або перейти до свого профілю.</p>
+
+        {% if user.is_authenticated %}
+            <p class="lead">
+                <a class="btn btn-primary btn-lg" href="{% url 'profile' %}" role="button">Перейти до профілю</a>
+                <a class="btn btn-danger btn-lg" href="{% url 'logout' %}" role="button">Вийти</a>
+            </p>
+        {% else %}
+            <p class="lead">
+                <a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Увійти</a>
+                <a class="btn btn-secondary btn-lg" href="{% url 'signup' %}" role="button">Зареєструватися</a>
+            </p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

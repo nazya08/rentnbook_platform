@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Реєстрація</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .card-header {
+            background-color: #28A745;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #28A745;
+            border-color: #28A745;
+        }
+
+        .btn-primary:hover {
+            background-color: #28A745;
+            border-color: #28A745;
+        }
+
+        .form-control:focus {
+            border-color: #28A745;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>Реєстрація</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'signup' %}">
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <!-- Ім'я -->
+                        <div class="form-group">
+                            <label for="first_name">Ім'я</label>
+                            <input type="text" name="first_name" class="form-control" placeholder="Введіть ім'я" required>
+                            {% if form.first_name.errors %}
+                                <div class="text-danger">{{ form.first_name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Прізвище -->
+                        <div class="form-group">
+                            <label for="last_name">Прізвище</label>
+                            <input type="text" name="last_name" class="form-control" placeholder="Введіть прізвище" required>
+                            {% if form.last_name.errors %}
+                                <div class="text-danger">{{ form.last_name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- По-батькові (необов'язкове) -->
+                        <div class="form-group">
+                            <label for="middle_name">По-батькові</label>
+                            <input type="text" name="middle_name" class="form-control" placeholder="Введіть по-батькові">
+                            {% if form.middle_name.errors %}
+                                <div class="text-danger">{{ form.middle_name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Телефон -->
+                        <div class="form-group">
+                            <label for="phone_number">Телефон</label>
+                            <input type="text" name="phone_number" class="form-control" placeholder="Введіть телефон" required>
+                            {% if form.phone_number.errors %}
+                                <div class="text-danger">{{ form.phone_number.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group">
+                            <label for="email">Пошта</label>
+                            <input type="email" name="email" class="form-control" placeholder="Введіть пошту" required>
+                            {% if form.email.errors %}
+                                <div class="text-danger">{{ form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Роль -->
+                        <div class="form-group">
+                            <label for="role">Роль</label>
+                            <select name="role" class="form-control" required>
+                                <option value="">Оберіть роль</option>
+                                <option value="renter">Орендар</option>
+                                <option value="landlord">Власник</option>
+                            </select>
+                            {% if form.role.errors %}
+                                <div class="text-danger">{{ form.role.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Пароль -->
+                        <div class="form-group">
+                            <label for="password">Пароль</label>
+                            <input type="password" name="password" class="form-control" placeholder="Введіть пароль" required>
+                            {% if form.password.errors %}
+                                <div class="text-danger">{{ form.password.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Повторний пароль -->
+                        <div class="form-group">
+                            <label for="password2">Повторіть пароль</label>
+                            <input type="password" name="password2" class="form-control" placeholder="Повторіть пароль" required>
+                            {% if form.password2.errors %}
+                                <div class="text-danger">{{ form.password2.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Кнопка реєстрації -->
+                        <button type="submit" class="btn btn-primary btn-block">Зареєструватися</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <p>Вже є акаунт? <a href="{% url 'login' %}">Увійти</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

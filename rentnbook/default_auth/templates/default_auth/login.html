@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Вхід{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center mt-5">Вхід</h2>
+
+            <!-- Display general messages -->
+            {% if messages %}
+                <div class="alert alert-danger">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'login' %}" class="mt-4">
+                {% csrf_token %}
+
+                <!-- Email field -->
+                <div class="form-group">
+                    <label for="email">Електронна пошта</label>
+                    <input type="email" id="email" name="email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" placeholder="Введіть вашу електронну пошту" required>
+
+                    {% if form.email.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Password field -->
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" id="password" name="password" class="form-control {% if form.password.errors %}is-invalid{% endif %}" placeholder="Введіть пароль" required>
+
+                    {% if form.password.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-success btn-block">Увійти</button>
+
+                <div class="text-center mt-3">
+                    <p>Немає облікового запису? <a href="{% url 'signup' %}">Зареєструватися</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
