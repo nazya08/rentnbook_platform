@@ -1,26 +1,74 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Головна{% endblock %}
+{% block title %}Головна - Пошук Житла{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <div class="jumbotron text-center">
-        <h1 class="display-4">Ласкаво просимо!</h1>
-        <p class="lead">Це головна сторінка вашого сайту.</p>
+    <!-- Головний блок -->
+    <div class="jumbotron bg-light shadow p-5 text-center rounded">
+        <h1 class="display-4 text-success">Ласкаво просимо на наш сайт!</h1>
+        <p class="lead text-secondary">
+            Ми допоможемо вам знайти ідеальне житло для вашого відпочинку чи роботи.
+        </p>
         <hr class="my-4">
-        <p>Ви можете здійснити вхід, зареєструватися або перейти до свого профілю.</p>
+        <p>Ви можете увійти, зареєструватися або почати пошук житла вже зараз!</p>
 
-        {% if user.is_authenticated %}
-            <p class="lead">
-                <a class="btn btn-primary btn-lg" href="{% url 'profile' %}" role="button">Перейти до профілю</a>
-                <a class="btn btn-danger btn-lg" href="{% url 'logout' %}" role="button">Вийти</a>
-            </p>
-        {% else %}
-            <p class="lead">
-                <a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Увійти</a>
-                <a class="btn btn-secondary btn-lg" href="{% url 'signup' %}" role="button">Зареєструватися</a>
-            </p>
-        {% endif %}
+        <div class="d-flex justify-content-center mt-4">
+            {% if user.is_authenticated %}
+                <a class="btn btn-outline-success btn-lg mx-2" href="{% url 'profile' %}" role="button">Перейти до профілю</a>
+                <a class="btn btn-outline-danger btn-lg mx-2" href="{% url 'logout' %}" role="button">Вийти</a>
+            {% else %}
+                <a class="btn btn-outline-success btn-lg mx-2" href="{% url 'login' %}" role="button">Увійти</a>
+                <a class="btn btn-outline-success btn-lg mx-2" href="{% url 'signup' %}" role="button">Зареєструватися</a>
+            {% endif %}
+            <a class="btn btn-success btn-lg mx-2" href="{% url 'accommodation_search' %}" role="button">Знайти житло</a>
+        </div>
     </div>
+
+    <section class="py-5">
+	<div class="container">
+		<div class="row align-items-center">
+			<div class="col-md-6">
+				<div class="pe-lg-5">
+					<img alt="" class="img-fluid rounded" src="{% static 'img/service_logo_main.jpg' %}">
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="ps-lg-5 mt-4 mt-lg-0">
+					<h2 class="display-6 fw-bold">Наші переваги</h2>
+					<p>Забезпечте собі комфортний відпочинок та надійне житло за допомогою нашого сервісу!</p>
+					<ul class="list-unstyled">
+    <li class="d-flex align-items-center mb-3">
+        <div class="text-success me-3">
+            <svg class="bi bi-check-circle-fill" fill="currentColor" height="24" width="24" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+            </svg>
+        </div>
+        <span>Широкий вибір квартир та будинків для оренди на будь-який смак.</span>
+    </li>
+    <li class="d-flex align-items-center mb-3">
+        <div class="text-success me-3">
+            <svg class="bi bi-check-circle-fill" fill="currentColor" height="24" width="24" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+            </svg>
+        </div>
+        <span>Легке та швидке бронювання житла онлайн без зайвих турбот.</span>
+    </li>
+    <li class="d-flex align-items-center mb-3">
+        <div class="text-success me-3">
+            <svg class="bi bi-check-circle-fill" fill="currentColor" height="24" width="24" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+            </svg>
+        </div>
+        <span>Гарантована безпека та конфіденційність при оплаті та бронюванні.</span>
+    </li>
+</ul>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
 </div>
 {% endblock %}

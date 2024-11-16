@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block title %}Пошук Житла{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Пошук житла</h1>
+    <form method="get" class="mb-4">
+        <div class="form-group">
+            <label for="{{ form.location.id_for_label }}"><strong>{{ form.location.label }}</strong></label>
+            {{ form.location }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.available_from.id_for_label }}"><strong>{{ form.available_from.label }}</strong></label>
+            {{ form.available_from }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.available_to.id_for_label }}"><strong>{{ form.available_to.label }}</strong></label>
+            {{ form.available_to }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.max_guests.id_for_label }}"><strong>{{ form.max_guests.label }}</strong></label>
+            {{ form.max_guests }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.rental_type.id_for_label }}"><strong>{{ form.rental_type.label }}</strong></label>
+            {{ form.rental_type }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.amenities.id_for_label }}"><strong>{{ form.amenities.label }}</strong></label>
+            <div class="amenities-container">
+                {{ form.amenities }}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-green">Пошук</button>
+    </form>
+
+    <h2>Результати</h2>
+    {% if accommodations %}
+        <div class="row">
+            {% for accommodation in accommodations %}
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        {% if accommodation.photos.first %}
+                            <img src="{{ accommodation.photos.first.photo.url }}" class="card-img-top" alt="{{ accommodation.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ accommodation.title }}</h5>
+                            <p><strong>Ціна за ніч:</strong> ₴{{ accommodation.price_per_night }}</p>
+                            <p><strong>Місцезнаходження:</strong> {{ accommodation.location }}</p>
+                            <p><strong>Макс. гостей:</strong> {{ accommodation.max_guests }}</p>
+                            <a href="{% url 'accommodation_detail' uuid=accommodation.uuid %}" class="btn btn-green">Детальніше</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Не знайдено результатів за вказаними критеріями.</p>
+    {% endif %}
+
+    <!-- Пагінація -->
+    {% if is_paginated %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}">Попередня</a>
+                    </li>
+                {% endif %}
+                {% for i in paginator.page_range %}
+                    <li class="page-item {% if i == page_obj.number %}active{% endif %}">
+                        <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ i }}">{{ i }}</a>
+                    </li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.next_page_number }}">Наступна</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+</div>
+
+{% block styles %}
+    <style>
+        /* Зелені стилі для кнопок та форм */
+        .btn-green {
+            background-color: #28a745; /* Зелений колір для кнопок */
+            border-color: #28a745;
+            color: white; /* Білий колір тексту в кнопках */
+        }
+
+        .btn-green:hover {
+            background-color: #218838; /* Трохи темніший відтінок при наведенні */
+            border-color: #1e7e34;
+            color: white; /* Зберігаємо білий колір тексту при наведенні */
+        }
+
+        .form-control {
+            border-color: #28a745; /* Зелені рамки для полів вводу */
+        }
+
+        .form-control:focus {
+            border-color: #218838; /* Зміна кольору рамки при фокусуванні */
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+        .pagination .page-link {
+            color: #28a745; /* Зелені кольори для пагінації */
+        }
+
+        .pagination .page-link:hover {
+            background-color: #28a745;
+            color: white;
+        }
+
+        /* Адаптація для мобільних пристроїв */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        /* Контейнер для результатів пошуку */
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;  /* Відступи між картками */
+        }
+
+        .card {
+            width: 100%;
+            max-width: 33.33%; /* Три картки в ряд */
+            min-height: 450px; /* Мінімальна висота картки */
+            border: 1px solid #ddd; /* Рамка для картки */
+            border-radius: 8px; /* Краї картки */
+            overflow: hidden; /* При необхідності обрізає зайвий контент */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Легке затемнення */
+        }
+
+        /* Висота карток - мінімальна висота та рівний розмір */
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;  /* Забезпечує, що контент всередині картки займає всю висоту */
+        }
+
+        .card {
+            width: 100%;
+            max-width: 350px; /* Встановлюємо максимальну ширину картки */
+            min-height: 450px; /* Мінімальна висота картки */
+            border: 1px solid #ddd; /* Рамка для картки */
+            border-radius: 8px; /* Краї картки */
+            overflow: hidden; /* При необхідності обрізає зайвий контент */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Легке затемнення */
+        }
+
+        /* Фотографія на картці */
+        .card-img-top {
+            width: 100%;
+            height: 200px;  /* Висота для фотографії */
+            object-fit: cover;  /* Завдяки object-fit, зображення заповнює контейнер */
+        }
+
+        /* Текст на картці */
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Визначення поля для кнопки */
+        .card-body .btn {
+            margin-top: auto;  /* Кнопка буде внизу картки */
+        }
+    </style>
+
+{% endblock %}
+
+{% endblock %}
