@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Редагування житла{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <h2 class="text-center mb-4">Редагування інформації про житло</h2>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'my_accommodations' %}" class="btn btn-secondary">Скасувати</a>
+                            <button type="submit" class="btn btn-success">Зберегти</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load custom_filters %}
+
+{% block title %}Додати нове житло{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">Додати нове житло</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <label for="{{ form.title.id_for_label }}" class="form-label">Назва житла</label>
+                {{ form.title|add_class:"form-control" }}
+            </div>
+            <div class="col-md-6 mb-4">
+                <label for="{{ form.location.id_for_label }}" class="form-label">Місцезнаходження</label>
+                {{ form.location|add_class:"form-control" }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <label for="{{ form.price_per_night.id_for_label }}" class="form-label">Ціна за ніч (₴)</label>
+                {{ form.price_per_night|add_class:"form-control" }}
+            </div>
+            <div class="col-md-6 mb-4">
+                <label for="{{ form.rental_type.id_for_label }}" class="form-label">Тип житла</label>
+                {{ form.rental_type|add_class:"form-control" }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <label for="{{ form.description.id_for_label }}" class="form-label">Опис</label>
+                {{ form.description|add_class:"form-control" }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <label for="{{ form.max_guests.id_for_label }}" class="form-label">Максимальна кількість гостей</label>
+                {{ form.max_guests|add_class:"form-control" }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <label for="{{ form.available_from.id_for_label }}" class="form-label">Доступне з</label>
+                {{ form.available_from|add_class:"form-control" }}
+            </div>
+            <div class="col-md-6 mb-4">
+                <label for="{{ form.available_to.id_for_label }}" class="form-label">Доступне до</label>
+                {{ form.available_to|add_class:"form-control" }}
+            </div>
+        </div>
+
+        <div>
+            <label for="{{ form.amenities.id_for_label }}" class="form-label">Зручності</label>
+            {{ form.amenities }}
+        </div>
+
+        <p></p>
+
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <label for="{{ form.is_active.id_for_label }}" class="form-label">Статус житла (Активне)</label>
+                {{ form.is_active|add_class:"form-check-input" }}
+            </div>
+        </div>
+
+        <!-- Форма для завантаження до 10 фото -->
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <label for="{{ form.photos.id_for_label }}" class="form-label">Фото житла (до 10 фото)</label>
+                <div class="custom-file">
+                    {{ form.photos|add_class:"form-control" }}
+                    <small class="text-muted">Виберіть до 10 фото.</small>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Додати житло</button>
+    </form>
+</div>
+
+{% block styles %}
+    <style>
+        /* Додаткові стилі для кращої вигляду форми */
+        .form-label {
+            font-weight: 600;
+        }
+
+        .custom-file {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .custom-file input {
+            margin-bottom: 0.5rem;
+        }
+
+        button[type="submit"] {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+        }
+    </style>
+{% endblock %}
+{% endblock %}

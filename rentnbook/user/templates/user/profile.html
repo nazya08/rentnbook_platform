@@ -39,7 +39,7 @@
 
     {% if profile_user.role == 'renter' %}
         <div class="renter-section mt-5">
-            <h3>Інформація для Орендаря</h3>
+            <h3>Інформація про орендаря</h3>
             <p><strong>Історія оренди:</strong> {{ profile_user.renter_profile.rental_history|default_if_none:"Немає інформації" }}</p>
             <p><strong>Бажані властивості:</strong> {{ profile_user.renter_profile.preferred_properties|default_if_none:"Не вказано" }}</p>
             <form method="post" action="{% url 'update_renter_profile' %}">
@@ -57,7 +57,7 @@
         </div>
     {% elif profile_user.role == 'landlord' %}
         <div class="landlord-section mt-5">
-            <h3>Інформація для Орендодавця</h3>
+            <h3>Інформація про орендодавця</h3>
             <p><strong>Дата початку хостингу:</strong> {{ profile_user.landlord_profile.hosting_since|date:"d M Y"|default:"Інформація для орендодавця ще не заповнена." }}</p>
         </div>
     {% endif %}

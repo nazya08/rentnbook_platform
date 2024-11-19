@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Мої житла{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">Мої житла</h1>
+
+    <!-- Форма фільтрації -->
+    <form method="GET" class="mb-4">
+        <div class="row">
+            <div class="col-md-4">
+                {{ form.is_active.label }}
+                {{ form.is_active }}
+            </div>
+            <div class="col-md-4">
+                {{ form.rental_type.label }}
+                {{ form.rental_type }}
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary w-100 mb-2">Фільтрувати</button>
+                <!-- Кнопка для створення нового житла -->
+                <a href="{% url 'accommodation_create' %}" class="btn btn-success w-100">Створити</a>
+            </div>
+        </div>
+    </form>
+
+    {% if accommodations %}
+        <div class="row">
+            {% for accommodation in accommodations %}
+                <div class="col-md-4 mb-4 d-flex justify-content-center">
+                    <div class="card shadow-sm border-light d-flex flex-column h-100">
+                        {% if accommodation.photos.first %}
+                            <img src="{{ accommodation.photos.first.photo.url }}" class="card-img-top accommodation-img" alt="{{ accommodation.title }}">
+                        {% else %}
+                            <img src="{% static 'img/no-photo.jpg' %}" class="card-img-top" alt="No Image">
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ accommodation.title }}</h5>
+                            <p><strong>Ціна за ніч:</strong> ₴{{ accommodation.price_per_night }}</p>
+                            <p><strong>Місцезнаходження:</strong> {{ accommodation.location }}</p>
+                            <p><strong>Тип житла:</strong> {{ accommodation.rental_type }}</p>
+                            <a href="{% url 'accommodation_detail' uuid=accommodation.uuid %}" class="btn btn-success w-100 mt-auto">Детальніше</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="pagination">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Попередня</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            Сторінка {{ page_obj.number }} з {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Наступна</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    {% endif %}
+
+
+    {% else %}
+        <div class="alert alert-info mt-4" role="alert">
+            У вас немає доданого житла.
+        </div>
+    {% endif %}
+</div>
+
+{% block styles %}
+    <style>
+        /* Висота карток - мінімальна висота та рівний розмір */
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;  /* Забезпечує, що контент всередині картки займає всю висоту */
+        }
+
+        .card {
+            width: 100%;
+            max-width: 350px; /* Встановлюємо максимальну ширину картки */
+            min-height: 450px; /* Мінімальна висота картки */
+            border: 1px solid #ddd; /* Рамка для картки */
+            border-radius: 8px; /* Краї картки */
+            overflow: hidden; /* При необхідності обрізає зайвий контент */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Легке затемнення */
+        }
+
+        /* Встановлюємо однаковий розмір для картинок */
+        .accommodation-img {
+            width: 100%;
+            height: 200px; /* Встановлюємо фіксовану висоту */
+            object-fit: cover; /* Обрізаємо зображення, щоб вони відповідали заданому розміру */
+        }
+    </style>
+{% endblock %}
+
+{% endblock %}

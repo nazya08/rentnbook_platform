@@ -146,6 +146,12 @@
                         <p>{{ accommodation.location }}</p>
                     </div>
 
+                    <!-- Тип житла -->
+                    <div class="my-3">
+                        <h5>Тип житла:</h5>
+                        <p>{{ accommodation.rental_type }}</p>
+                    </div>
+
                     <!-- Зручності -->
                     <div class="my-3">
                         <h5>Зручності:</h5>
@@ -171,12 +177,21 @@
                     </div>
 
                     <!-- Кнопка "Забронювати" -->
-                    <a class="btn btn-lg btn-success" href="#">Забронювати</a>
-
+                    {% if request.user != accommodation.owner.user %}
+                        <a class="btn btn-lg btn-success" href="#">Забронювати</a>
                     <!-- Кнопки для додаткових дій -->
                     <div class="mt-3">
                         <a href="" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#ownerContactModal">Зв'язатися з власником</a>
                     </div>
+                    {% endif %}
+
+                    <!-- Кнопка "Редагувати інформацію" для власника -->
+                    {% if request.user == accommodation.owner.user %}
+                        <div class="my-3">
+                            <a href="{% url 'accommodation_update' uuid=accommodation.uuid %}" class="btn btn-outline-warning btn-sm">Редагувати інформацію</a>
+                        </div>
+                    {% endif %}
+
 
                 <!-- Модальне вікно для контактів власника -->
                 <div class="modal fade" id="ownerContactModal" tabindex="-1" aria-labelledby="ownerContactModalLabel" aria-hidden="true">

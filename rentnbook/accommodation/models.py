@@ -35,6 +35,7 @@ class Accommodation(TimeStampedModel):
     amenities = models.ManyToManyField(Amenity, blank=True, related_name="accommodations")
     available_from = models.DateField()
     available_to = models.DateField()
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = "Accommodation"
@@ -48,7 +49,7 @@ class AccommodationPhoto(models.Model):
     accommodation = models.ForeignKey(
         Accommodation, related_name='photos', on_delete=models.CASCADE
     )
-    photo = models.ImageField(upload_to='accommodation_photos/')
+    photo = models.FileField(upload_to='accommodation_photos/')
     caption = models.CharField(max_length=255, blank=True)
 
     class Meta:

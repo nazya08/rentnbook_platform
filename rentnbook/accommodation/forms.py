@@ -1,5 +1,5 @@
 from django import forms
-from .models import RentalTypeChoices, Amenity
+from .models import RentalTypeChoices, Amenity, Accommodation, AccommodationPhoto
 
 
 class AccommodationSearchForm(forms.Form):
@@ -25,7 +25,7 @@ class AccommodationSearchForm(forms.Form):
     )
     rental_type = forms.ChoiceField(
         required=False,
-        label="Тип оренди",
+        label="Тип житла",
         choices=[("", "Будь-який тип")] + RentalTypeChoices.choices,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
@@ -34,4 +34,41 @@ class AccommodationSearchForm(forms.Form):
         queryset=Amenity.objects.all(),
         label="Зручності",
         widget=forms.CheckboxSelectMultiple()
+    )
+
+
+class AccommodationFilterForm(forms.Form):
+    is_active = forms.BooleanField(required=False, label="Тільки активні", initial=True)
+    rental_type = forms.ChoiceField(
+        required=False,
+        choices=[('', 'Усі типи')] + list(RentalTypeChoices.choices),
+        label="Тип житла"
+    )
+
+
+class AccommodationForm(forms.ModelForm):
+    class Meta:
+        model = Accommodation
+        fields = (
+            'title', 'description', 'rental_type', 'price_per_night',
+            'location', 'max_guests', 'amenities', 'available_from', 'available_to',
+        )
+
+    amenities = forms.ModelMultipleChoiceField(
+        queryset=Amenity.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
+    available_from = forms.DateField(
+        widget=forms.SelectDateWidget(years=range(2020, 2031)),
+    )
+
+    available_to = forms.DateField(
+        widget=forms.SelectDateWidget(years=range(2020, 2031)),
+    )
+
+    photos = forms.FileField(
+        widget=forms.TextInput(attrs={'multiple': True, "type": "File", "class": "form-control", }),
+        required=False
     )

@@ -44,7 +44,7 @@
                         <a class="dropdown-item" href="#">Мої поточні оренди</a>
                     {% elif user.role == 'landlord' %}
                         <a class="dropdown-item" href="#">Запити на оренду</a>
-                        <a class="dropdown-item" href="#">Мої об'єкти</a>
+                        <a class="dropdown-item" href="{% url 'my_accommodations' %}">Мої об'єкти</a>
                     {% endif %}
                     <a class="dropdown-item" href="{% url 'logout' %}">Вийти</a>
                 </div>
