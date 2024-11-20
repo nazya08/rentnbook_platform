@@ -35,6 +35,16 @@ class AccommodationSearchForm(forms.Form):
         label="Зручності",
         widget=forms.CheckboxSelectMultiple()
     )
+    sort_by = forms.ChoiceField(
+        choices=[
+            ('price_per_night', 'Ціна за ніч'),
+            ('title', 'Назва'),
+            ('location', 'Місцезнаходження'),
+            ('max_guests', 'Кількість гостей')
+        ],
+        required=False,
+        label="Сортування за",
+    )
 
 
 class AccommodationFilterForm(forms.Form):

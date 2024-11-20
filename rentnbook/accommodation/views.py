@@ -48,6 +48,11 @@ class AccommodationSearchView(ListView):
                 for amenity in amenities:
                     queryset = queryset.filter(amenities=amenity)
 
+            # Сортуємо за обраним полем
+            sort_by = form.cleaned_data.get("sort_by")
+            if sort_by:
+                queryset = queryset.order_by(sort_by)
+
         return queryset.distinct()
 
     def get_search_form(self):

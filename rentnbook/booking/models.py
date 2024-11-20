@@ -17,11 +17,13 @@ class Booking(TimeStampedModel):
     accommodation = models.ForeignKey(Accommodation, on_delete=models.CASCADE, related_name='bookings')
     start_date = models.DateField()
     end_date = models.DateField()
+    guests = models.PositiveIntegerField()
     status = models.CharField(
         max_length=20,
         choices=BookingStatusChoices.choices,
         default=BookingStatusChoices.PENDING
     )
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = "Booking"

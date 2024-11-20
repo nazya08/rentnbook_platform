@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Запити на оренду{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">Запити на оренду</h1>
+
+    {% if bookings %}
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Житло</th>
+                        <th>Початок</th>
+                        <th>Кінець</th>
+                        <th>Кількість гостей</th>
+                        <th>Статус</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <a href="{% url 'accommodation_detail' booking.accommodation.uuid %}">
+                                    {{ booking.accommodation.title }}
+                                </a>
+                            </td>
+                            <td>{{ booking.start_date|date:"d.m.Y" }}</td>
+                            <td>{{ booking.end_date|date:"d.m.Y" }}</td>
+                            <td>{{ booking.guests }}</td>
+                            <td>
+                                <span class="badge bg-warning">{{ booking.status }}</span>
+                            </td>
+                            <td>
+                                <form method="POST" style="display:inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="booking_uuid" value="{{ booking.uuid }}">
+                                    <button type="submit" name="action" value="confirm" class="btn btn-sm btn-success">Підтвердити</button>
+                                    <button type="submit" name="action" value="reject" class="btn btn-sm btn-danger">Відхилити</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            Немає нових запитів на оренду.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

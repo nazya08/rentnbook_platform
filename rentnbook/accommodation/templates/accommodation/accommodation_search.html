@@ -33,6 +33,11 @@
                 {{ form.amenities }}
             </div>
         </div>
+        <!-- Додаємо поле для сортування -->
+        <div class="form-group">
+            <label for="{{ form.sort_by.id_for_label }}"><strong>{{ form.sort_by.label }}</strong></label>
+            {{ form.sort_by }}
+        </div>
         <button type="submit" class="btn btn-green">Пошук</button>
     </form>
 

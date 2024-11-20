@@ -177,13 +177,20 @@
                     </div>
 
                     <!-- Кнопка "Забронювати" -->
-                    {% if request.user != accommodation.owner.user %}
-                        <a class="btn btn-lg btn-success" href="#">Забронювати</a>
-                    <!-- Кнопки для додаткових дій -->
-                    <div class="mt-3">
-                        <a href="" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#ownerContactModal">Зв'язатися з власником</a>
-                    </div>
+                    {% if user.is_authenticated %}
+                        {% if request.user != accommodation.owner.user and request.user.role != 'landlord' %}
+                            <a class="btn btn-lg btn-success" href="{% url 'create_booking' uuid=accommodation.uuid %}">Забронювати</a>
+                            <!-- Кнопки для додаткових дій -->
+                            <div class="mt-3">
+                                <a href="" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#ownerContactModal">Зв'язатися з власником</a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="mt-3">
+                            <p>Щоб забронювати житло або зв'язатися з власником, будь ласка, <a href="{% url 'login' %}">увійдіть у систему</a>.</p>
+                        </div>
                     {% endif %}
+
 
                     <!-- Кнопка "Редагувати інформацію" для власника -->
                     {% if request.user == accommodation.owner.user %}

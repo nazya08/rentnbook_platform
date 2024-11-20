@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Мої бронювання{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">Мої бронювання</h1>
+
+    <!-- Форма для фільтрації за статусом -->
+    <div class="mb-3">
+        <form method="get" action="{% url 'my_bookings' %}">
+            <div class="row">
+                <div class="col-md-4">
+                    <select name="status" class="form-control">
+                        <option value="" {% if not request.GET.status %}selected{% endif %}>Усі статуси</option>
+                        <option value="confirmed" {% if request.GET.status == 'confirmed' %}selected{% endif %}>Підтверджено</option>
+                        <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>Очікує</option>
+                        <option value="cancelled" {% if request.GET.status == 'cancelled' %}selected{% endif %}>Скасовано</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success">Фільтрувати</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {% if bookings %}
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Житло</th>
+                        <th>Початок</th>
+                        <th>Кінець</th>
+                        <th>Кількість гостей</th>
+                        <th>Статус</th>
+                        <th>Активне</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <a href="{% url 'accommodation_detail' booking.accommodation.uuid %}">
+                                    {{ booking.accommodation.title }}
+                                </a>
+                            </td>
+                            <td>{{ booking.start_date|date:"d.m.Y" }}</td>
+                            <td>{{ booking.end_date|date:"d.m.Y" }}</td>
+                            <td>{{ booking.guests }}</td>
+                            <td>
+                                {% if booking.status == 'confirmed' %}
+                                    <span class="badge bg-success">{{ booking.status }}</span>
+                                {% elif booking.status == 'pending' %}
+                                    <span class="badge bg-warning">{{ booking.status }}</span>
+                                {% elif booking.status == 'cancelled' %}
+                                    <span class="badge bg-danger">{{ booking.status }}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ booking.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if booking.is_active %}
+                                    Так
+                                {% else %}
+                                    Ні
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'booking_detail' booking.uuid %}" class="btn btn-sm btn-info">Деталі</a>
+                                {% if booking.is_active and booking.status == 'pending' %}
+                                    <form action="{% url 'cancel_booking' booking.uuid %}" method="POST" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger">Скасувати</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            У вас немає активних бронювань.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

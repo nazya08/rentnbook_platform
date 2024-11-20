@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">Бронювання житла</h1>
+
+    <form method="POST" novalidate>
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="{{ form.start_date.id_for_label }}" class="form-label">Дата заїзду</label>
+            {{ form.start_date }}
+            {% if form.start_date.errors %}
+                <div class="alert alert-danger mt-2">
+                    {% for error in form.start_date.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.end_date.id_for_label }}" class="form-label">Дата виїзду</label>
+            {{ form.end_date }}
+            {% if form.end_date.errors %}
+                <div class="alert alert-danger mt-2">
+                    {% for error in form.end_date.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.guests.id_for_label }}" class="form-label">Кількість гостей</label>
+            {{ form.guests }}
+            {% if form.guests.errors %}
+                <div class="alert alert-danger mt-2">
+                    {% for error in form.guests.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Забронювати</button>
+    </form>
+</div>
+{% endblock %}
