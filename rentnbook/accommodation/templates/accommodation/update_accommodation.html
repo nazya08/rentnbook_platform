@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load custom_filters %}
 
 {% block title %}Редагування житла{% endblock %}
 
@@ -6,17 +7,45 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
-            <h2 class="text-center mb-4">Редагування інформації про житло</h2>
+            <h2 class="text-center mb-4 text-success">Редагування інформації про житло</h2>
 
-            <div class="card shadow-sm">
+            <div class="card shadow border-0">
                 <div class="card-body">
-                    <form method="post">
+                    <!-- Відображення помилок форми -->
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <h5>Будь ласка, виправте наступні помилки:</h5>
+                            <ul>
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    <form method="post" class="needs-validation">
                         {% csrf_token %}
-                        {{ form.as_p }}
+
+                        <!-- Динамічне відображення форми з Bootstrap стилями -->
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field|add_class:"form-control" }}
+                                {% if field.help_text %}
+                                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
 
                         <div class="d-flex justify-content-between mt-4">
-                            <a href="{% url 'my_accommodations' %}" class="btn btn-secondary">Скасувати</a>
-                            <button type="submit" class="btn btn-success">Зберегти</button>
+                            <a href="{% url 'accommodation_detail' uuid=accommodation.uuid %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Скасувати
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Зберегти
+                            </button>
                         </div>
                     </form>
                 </div>

@@ -1,3 +1,5 @@
+from statistics import mean
+
 from django.db import models
 from django.db.models import TextChoices
 from django.utils.translation import gettext_lazy as _
@@ -43,6 +45,15 @@ class Accommodation(TimeStampedModel):
 
     def __str__(self):
         return f'Accommodation #{self.uuid}'
+
+    @property
+    def rating(self):
+        reviews = self.reviews.all()
+
+        if not reviews:
+            return None
+
+        return mean(review.rating for review in reviews)
 
 
 class AccommodationPhoto(models.Model):

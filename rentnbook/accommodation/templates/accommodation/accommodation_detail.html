@@ -11,6 +11,77 @@
 </head>
 
 <style>
+    .accommodation-detail {
+      padding: 20px;
+    }
+
+    .accommodation-title {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .accommodation-location, .accommodation-price {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+    }
+
+    .reviews-section {
+      margin-top: 30px;
+    }
+
+    .reviews-list {
+      margin-top: 20px;
+    }
+
+    .review-card {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .review-header strong {
+      font-size: 1.2rem;
+    }
+
+    .review-rating {
+      font-size: 1.1rem;
+      color: #ffb700;
+    }
+
+    .review-comment {
+      font-size: 1rem;
+      color: #555;
+    }
+
+    .no-reviews {
+      font-style: italic;
+      color: #888;
+    }
+
+    .btn-green {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+
+    .btn-green:hover {
+      background-color: #218838;
+    }
+</style>
+
+<style>
     /* Стиль для заголовка */
     .title-with-decoration {
         font-size: 3rem;  /* Збільшуємо розмір шрифта */
@@ -129,9 +200,20 @@
                     <!-- Оцінка та відгуки (якщо є) -->
                     <div class="d-flex align-items-center">
                         <span class="badge bg-warning text-dark me-2">
-                            <i class="fas fa-star"></i> 4.5
+                            <i class="fas fa-star"></i>
+                            {% if accommodation.rating %}
+                                {{ accommodation.rating|floatformat:1 }} <!-- Показуємо середній рейтинг з 1 знаком після коми -->
+                            {% else %}
+                                0 <!-- Якщо немає відгуків, то рейтинг = 0 -->
+                            {% endif %}
                         </span>
-                        <span class="text-muted">(23 відгуки)</span>
+                        <span class="text-muted">
+                            {% if accommodation.reviews.count > 0 %}
+                                ({{ accommodation.reviews.count }} відгуків)
+                            {% else %}
+                                (Немає відгуків)
+                            {% endif %}
+                        </span>
                     </div>
 
                     <!-- Ціна за ніч -->
@@ -221,7 +303,8 @@
                                     {% else %}
                                         <span>Не вказано</span>
                                     {% endif %}
-                                </p>                            </div>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -241,6 +324,30 @@
             {% empty %}
                 <p>Немає додаткових фото для відображення.</p>
             {% endfor %}
+        </div>
+
+        <div class="reviews-section">
+          <h3>Відгуки</h3>
+
+          {% if accommodation.reviews.all %}
+              <div class="reviews-list">
+                {% for review in reviews %}
+                  <div class="review-card">
+                    <div class="review-header">
+                      <strong>{{ review.renter.user.first_name }} {{ review.renter.user.last_name }}</strong>
+                      <span class="review-rating">Оцінка: {{ review.rating }} з 5</span>
+                    </div>
+                    <p class="review-comment">{{ review.comment }}</p>
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <p class="no-reviews">Немає відгуків для цього житла.</p>
+          {% endif %}
+
+          {% if request.user.landlord_profile != accommodation.owner %}
+            <a href="{% url 'review_create' uuid=accommodation.uuid %}" class="btn btn-green">Залишити відгук</a>
+          {% endif %}
         </div>
     </div>
 </section>

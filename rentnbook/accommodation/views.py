@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, UpdateView
 
 from .models import Accommodation, AccommodationPhoto
@@ -72,6 +72,12 @@ class AccommodationDetailView(DetailView):
     def get_object(self, queryset=None):
         return get_object_or_404(Accommodation, uuid=self.kwargs['uuid'])
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        accommodation = self.get_object()
+        context['reviews'] = accommodation.reviews.all().order_by('-created_at')
+        return context
+
 
 class MyAccommodationsView(LoginRequiredMixin, ListView):
     model = Accommodation
@@ -134,7 +140,6 @@ class AccommodationUpdateView(LoginRequiredMixin, UpdateView):
     model = Accommodation
     fields = ['title', 'description', 'price_per_night', 'location', 'max_guests', 'available_from', 'available_to']
     template_name = 'accommodation/update_accommodation.html'
-    success_url = reverse_lazy('my_accommodations')
 
     def get_object(self, queryset=None):
         return get_object_or_404(Accommodation, uuid=self.kwargs['uuid'])
@@ -148,4 +153,8 @@ class AccommodationUpdateView(LoginRequiredMixin, UpdateView):
         if obj.owner.user != request.user:
             return self.handle_no_permission()
         return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        # Перенаправляє на сторінку деталі житла після успішного оновлення
+        return reverse('accommodation_detail', kwargs={'uuid': self.kwargs['uuid']})
 
