@@ -36,9 +36,4 @@ collectstatic:
 	@echo "Collecting static files..."
 	@$(DJANGO_MANAGE) collectstatic --noinput
 
-# Test the project
-test:
-	@echo "Running tests..."
-	@$(DJANGO_MANAGE) test
-
 .PHONY: install makemigrations migrate createsuperuser run collectstatic test
