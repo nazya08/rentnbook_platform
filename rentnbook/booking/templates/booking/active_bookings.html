@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Активні бронювання{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Активні бронювання</h2>
+    {% if bookings %}
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Житло</th>
+                    <th>Орендар</th>
+                    <th>Телефон орендаря</th>
+                    <th>Кількість гостей</th>
+                    <th>Дата початку</th>
+                    <th>Дата завершення</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><a href="{% url 'accommodation_detail' booking.accommodation.uuid %}">
+                                    {{ booking.accommodation.title }}
+                            </a>
+                        </td>
+                        <td>{{ booking.renter.user.first_name }} {{ booking.renter.user.last_name }}</td>
+                        <td>{{ booking.renter.user.phone_number }}</td>
+                        <td>{{ booking.guests }}</td>
+                        <td>{{ booking.start_date }}</td>
+                        <td>{{ booking.end_date }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Немає активних бронювань.</p>
+    {% endif %}
+</div>
+{% endblock %}

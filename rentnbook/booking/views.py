@@ -123,3 +123,17 @@ class RentRequestsView(LoginRequiredMixin, ListView):
             booking.save()
 
         return redirect('rent_requests')
+
+
+class ActiveBookingsView(LoginRequiredMixin, ListView):
+    model = Booking
+    template_name = 'booking/active_bookings.html'
+    context_object_name = 'bookings'
+
+    def get_queryset(self):
+        # Фільтруємо бронювання за житлом, яке належить поточному користувачеві
+        return Booking.objects.filter(
+            accommodation__owner=self.request.user.landlord_profile,
+            status=BookingStatusChoices.CONFIRMED,
+            is_active=True,
+        )

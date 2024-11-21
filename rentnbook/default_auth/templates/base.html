@@ -40,9 +40,10 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{% url 'profile' %}">Профіль</a>
                     {% if user.role == 'renter' %}
-                        <a class="dropdown-item" href="{% url 'my_bookings' %}">Мої поточні оренди</a>
+                        <a class="dropdown-item" href="{% url 'my_bookings' %}">Мої поточні бронювання</a>
                     {% elif user.role == 'landlord' %}
                         <a class="dropdown-item" href="{% url 'rent_requests' %}">Запити на оренду</a>
+                        <a class="dropdown-item" href="{% url 'active_bookings' %}">Активні бронювання</a>
                         <a class="dropdown-item" href="{% url 'my_accommodations' %}">Мої об'єкти</a>
                     {% endif %}
                     <a class="dropdown-item" href="{% url 'logout' %}">Вийти</a>
