@@ -7,12 +7,14 @@ from user.models import Renter
 
 
 class BookingStatusChoices(models.TextChoices):
+    # Перелік статусів бронювання, які можуть бути встановлені.
     PENDING = 'pending', _('Pending')
     CONFIRMED = 'confirmed', _('Confirmed')
     CANCELLED = 'cancelled', _('Cancelled')
 
 
 class Booking(TimeStampedModel):
+    # Модель для бронювання житла.
     renter = models.ForeignKey(Renter, on_delete=models.CASCADE, related_name='bookings')
     accommodation = models.ForeignKey(Accommodation, on_delete=models.CASCADE, related_name='bookings')
     start_date = models.DateField()

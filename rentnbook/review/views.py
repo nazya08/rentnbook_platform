@@ -15,6 +15,7 @@ class ReviewCreateView(CreateView):
         accommodation = Accommodation.objects.get(uuid=self.kwargs['uuid'])
         renter = self.request.user.renter_profile
 
+        # Створення виведення повідомлення про помилку
         if Review.objects.filter(accommodation=accommodation, renter=renter).exists():
             form.add_error("rating", "Ви вже залишали відгук для цього житла.")
             return self.form_invalid(form)

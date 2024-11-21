@@ -10,6 +10,7 @@ from .models import Booking, Accommodation, BookingStatusChoices
 
 
 class BookingCreateView(CreateView):
+    # Відображення для створення нового бронювання.
     model = Booking
     form_class = BookingForm
     template_name = "booking/create_booking.html"
@@ -22,6 +23,7 @@ class BookingCreateView(CreateView):
         return kwargs
 
     def form_valid(self, form):
+        # Перевірка і збереження форми бронювання.
         accommodation = get_object_or_404(Accommodation, uuid=self.kwargs['uuid'])
         form.instance.accommodation = accommodation
         form.instance.renter = self.request.user.renter_profile

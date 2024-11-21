@@ -5,16 +5,20 @@ from .models import Booking
 
 
 class BookingForm(forms.ModelForm):
+    #Форма для створення або редагування бронювання.
+
     class Meta:
         model = Booking
         fields = ('start_date', 'end_date', 'guests',)
 
+        # Налаштування віджетів для кожного поля
         widgets = {
             'start_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'end_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'guests': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
         }
 
+        # Мітки для полів
         labels = {
             'start_date': 'Дата заїзду',
             'end_date': 'Дата виїзду',
@@ -37,6 +41,7 @@ class BookingForm(forms.ModelForm):
             })
 
     def clean(self):
+        # Валідатор для перевірки коректності введених даних.
         cleaned_data = super().clean()
         start_date = cleaned_data.get('start_date')
         end_date = cleaned_data.get('end_date')

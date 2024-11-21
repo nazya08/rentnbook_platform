@@ -12,19 +12,23 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
+    # Створення акаунту Орендаря
     def create_renter(self, email, password=None, **extra_fields):
         extra_fields.setdefault('role', 'renter')
         return self.create_user(email, password, **extra_fields)
 
+    # Створення акаунту Орендодавця
     def create_landlord(self, email, password=None, **extra_fields):
         extra_fields.setdefault('role', 'landlord')
         return self.create_user(email, password, **extra_fields)
 
+    # Створення акаунту Модератора
     def create_moderator(self, email, password=None, **extra_fields):
         extra_fields.setdefault('role', 'moderator')
         extra_fields.setdefault('is_staff', True)
         return self.create_user(email, password, **extra_fields)
 
+    # Створення акаунту Адміністратора
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
